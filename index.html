@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#f5f0eb" />
+  <title>妈妈的健康生活 · 雅致空间</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#faf7f2', 'cream-dark': '#f0ebe0',
+            charcoal: '#3a3530', 'charcoal-light': '#6b6560',
+            morandi: { green: '#8aab8e', 'green-light': '#b8d4ba', 'green-pale': '#e8f0e9' },
+            ink: '#4a4035',
+            blush: '#e8d5c8', dusty: '#b8a898',
+          },
+          fontFamily: {
+            serif: ['"Noto Serif SC"', 'Georgia', 'serif'],
+            sans: ['"Noto Sans SC"', 'sans-serif'],
+            xiaowei: ['"ZCOOL XiaoWei"', 'serif'],
+            mashan: ['"Ma Shan Zheng"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ═══ 基础 ═══ */
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #faf7f2;
+      color: #3a3530;
+      font-family: 'Noto Sans SC', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100dvh; overflow-x: hidden; margin: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    :root {
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-back:  cubic-bezier(0.34, 1.3, 0.64, 1);
+    }
+
+    /* ════════════════════════════════════════ */
+    /*           登录页                          */
+    /* ════════════════════════════════════════ */
+    #login-screen {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .login-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(145deg, #c8e0ca 0%, #dde8de 25%, #ede5dc 55%, #e8dcd4 80%, #d5e4d7 100%);
+      overflow: hidden;
+    }
+    .login-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 30% 20%, rgba(255,255,230,0.4) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 70% 80%, rgba(200,220,200,0.3) 0%, transparent 55%);
+    }
+    .petal {
+      position: absolute; pointer-events: none;
+      font-size: var(--sz, 16px);
+      opacity: 0;
+      animation: petalFall var(--dur, 8s) var(--delay, 0s) linear infinite;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
+    }
+    @keyframes petalFall {
+      0%   { transform: translateY(-60px) translateX(0) rotate(0deg) scale(0.8); opacity: 0; }
+      8%   { opacity: 0.7; }
+      85%  { opacity: 0.45; }
+      100% { transform: translateY(110vh) translateX(var(--drift, 40px)) rotate(var(--rot, 360deg)) scale(0.55); opacity: 0; }
+    }
+    .login-orb {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      animation: orbDrift var(--dur, 10s) ease-in-out infinite alternate;
+      background: radial-gradient(circle, var(--clr) 0%, transparent 65%);
+      opacity: var(--op, 0.2);
+    }
+    @keyframes orbDrift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(var(--dx, 15px), var(--dy, -20px)) scale(1.1); }
+    }
+
+    /* 登录卡片升级 */
+    .login-card {
+      position: relative; z-index: 10;
+      width: min(370px, calc(100vw - 40px));
+      background: rgba(250, 247, 242, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: 36px;
+      padding: 44px 36px 40px;
+      backdrop-filter: blur(28px) saturate(1.6);
+      -webkit-backdrop-filter: blur(28px) saturate(1.6);
+      box-shadow: 0 12px 60px rgba(100, 130, 100, 0.16), 0 2px 0 rgba(255,255,255,0.9) inset;
+      animation: cardEntrance 1s var(--ease-out-back) both;
+    }
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(50px) scale(0.93); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .login-card::before {
+      content: ''; position: absolute; top: -1px; left: 20%; right: 20%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+      border-radius: 1px;
+    }
+    .login-logo-icon {
+      width: 64px; height: 64px; border-radius: 22px;
+      background: linear-gradient(135deg, #8aab8e 0%, #b8d4ba 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 8px 24px rgba(138,171,142,0.45), 0 2px 0 rgba(255,255,255,0.5) inset;
+      animation: iconPop 0.7s var(--ease-out-back) 0.3s both;
+    }
+    @keyframes iconPop {
+      from { transform: scale(0.5) rotate(-12deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .login-title {
+      font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 600;
+      color: #3a3530; letter-spacing: 0.06em;
+    }
+    .login-subtitle {
+      font-size: 12px; color: #8aab8e; letter-spacing: 0.12em;
+    }
+    .login-quote {
+      font-family: 'Noto Serif SC', serif; font-size: 11px; color: #b0a898;
+      letter-spacing: 0.08em; line-height: 1.7;
+      border-left: 2px solid rgba(138,171,142,0.3);
+      padding-left: 10px; margin-top: 8px;
+    }
+
+    /* 输入框升级 */
+    .login-field { position: relative; margin-bottom: 15px; }
+    .login-field-icon {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      font-size: 15px; pointer-events: none; z-index: 1;
+      transition: transform 0.2s;
+    }
+    .login-input {
+      width: 100%; padding: 15px 16px 15px 44px;
+      background: rgba(240, 235, 225, 0.55);
+      border: 1.5px solid rgba(200, 190, 175, 0.45);
+      border-radius: 15px;
+      font-family: 'Noto Sans SC', sans-serif; font-size: 14px; color: #3a3530;
+      outline: none; transition: all 0.25s var(--ease-out-quart);
+      -webkit-appearance: none;
+    }
+    .login-input::placeholder { color: #b8a898; font-weight: 300; }
+    .login-input:focus {
+      background: rgba(255, 252, 248, 0.92);
+      border-color: rgba(138,171,142,0.55);
+      box-shadow: 0 0 0 3px rgba(138,171,142,0.12);
+    }
+    .login-input.error {
+      border-color: rgba(200, 100, 80, 0.5);
+      box-shadow: 0 0 0 3px rgba(200, 100, 80, 0.1);
+      animation: inputShake 0.35s var(--ease-out-quart);
+    }
+    @keyframes inputShake {
+      0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); } 60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    .eye-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px; cursor: pointer; padding: 4px; color: #a09888;
+      transition: color 0.2s; user-select: none;
+    }
+    .eye-toggle:active { transform: translateY(-50%) scale(0.88); }
+    .login-error {
+      display: none; align-items: center; gap: 6px;
+      padding: 10px 14px; border-radius: 10px;
+      background: rgba(200,80,60,0.07); border: 1px solid rgba(200,80,60,0.18);
+      font-size: 12px; color: #c05040; margin-bottom: 14px;
+    }
+    .login-error.show { display: flex; animation: fadeUp 0.3s var(--ease-out-expo) both; }
+
+    .login-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, #7a9d7e 0%, #9aba9e 100%);
+      border: none; border-radius: 17px; cursor: pointer;
+      font-family: 'Noto Serif SC', serif; font-size: 15px;
+      color: #fff; letter-spacing: 0.1em;
+      box-shadow: 0 8px 24px rgba(138,171,142,0.38);
+      transition: transform 0.15s var(--ease-out-quart), box-shadow 0.15s;
+      position: relative; overflow: hidden;
+    }
+    .login-btn:active { transform: scale(0.97); box-shadow: 0 3px 10px rgba(138,171,142,0.25); }
+    .login-btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.22), transparent 60%);
+      border-radius: inherit;
+    }
+    .login-hint { text-align: center; font-size: 11px; color: #b0a898; margin-top: 20px; letter-spacing: 0.05em; }
+
+    /* ═══ 页面过渡 ═══ */
+    #login-screen.exit { animation: screenExit 0.7s var(--ease-out-expo) forwards; }
+    @keyframes screenExit {
+      0%   { opacity: 1; transform: scale(1); }
+      60%  { opacity: 0.5; transform: scale(1.04); }
+      100% { opacity: 0; transform: scale(1.08); pointer-events: none; }
+    }
+    #app-screen { opacity: 0; animation: none; }
+    #app-screen.enter { animation: appEnter 0.8s var(--ease-out-expo) 0.35s both; }
+    @keyframes appEnter {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ════════════════════════════════════════ */
+    /*          主应用通用                       */
+    /* ════════════════════════════════════════ */
+    .hero-section {
+      position: relative; min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; overflow: hidden; z-index: 0;
+      background: linear-gradient(160deg, #d6e8d7 0%, #e8e0d4 35%, #f0e6dc 60%, #dde8de 100%);
+    }
+    .hero-bg::before {
+      content: ''; position: absolute; top: -20%; right: -15%;
+      width: 70vw; height: 70vw; max-width: 420px; max-height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,230,0.5) 0%, transparent 70%);
+      animation: drift 8s ease-in-out infinite alternate;
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; bottom: 5%; left: -10%;
+      width: 55vw; height: 55vw; max-width: 320px; max-height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(138,171,142,0.18) 0%, transparent 65%);
+      animation: drift 11s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(3%, 4%) scale(1.06); }
+    }
+    .light-orb {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      animation: float var(--dur, 6s) ease-in-out infinite alternate;
+      opacity: var(--op, 0.18);
+      background: radial-gradient(circle, var(--clr, #fff) 0%, transparent 70%);
+    }
+    @keyframes float {
+      from { transform: translateY(0) translateX(0); }
+      to   { transform: translateY(var(--dy, -15px)) translateX(var(--dx, 8px)); }
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.7s var(--ease-out-expo) forwards;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* 玻璃卡片升级 */
+    .glass-card {
+      background: rgba(250, 247, 242, 0.68);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 26px;
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      box-shadow: 0 6px 32px rgba(58,53,48,0.06), 0 1px 0 rgba(255,255,255,0.75) inset;
+      position: relative; overflow: hidden;
+      transition: transform 0.25s var(--ease-out-quart), box-shadow 0.25s;
+    }
+    .glass-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+    }
+    .glass-card:active { transform: scale(0.992); }
+
+    /* 卡片入场 */
+    .card-reveal {
+      opacity: 0; transform: translateY(36px);
+      transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+      transition-delay: var(--reveal-delay, 0s);
+    }
+    .card-reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* 优雅分割线 */
+    .divider-elegant {
+      display: flex; align-items: center; gap: 12px; margin: 0 auto;
+    }
+    .divider-elegant::before, .divider-elegant::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(160,152,136,0.25), transparent);
+    }
+    .divider-elegant span { font-size: 10px; color: #c0b8b0; letter-spacing: 0.15em; }
+
+    /* 天气 */
+    .weather-icon-wrap {
+      width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(138,171,142,0.18), rgba(184,212,186,0.22));
+      border-radius: 18px; font-size: 30px;
+      box-shadow: 0 2px 12px rgba(138,171,142,0.12);
+    }
+    .weather-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500;
+    }
+    .weather-loading { display: flex; align-items: center; gap: 6px; color: #8aab8e; font-size: 13px; }
+    .dot-pulse { display: flex; gap: 4px; }
+    .dot-pulse span {
+      width: 5px; height: 5px; border-radius: 50%; background: #8aab8e;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+    .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse {
+      0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+      40% { opacity: 1; transform: scale(1); }
+    }
+
+    /* 古诗/雅言展示区 */
+    .verse-card {
+      position: relative; overflow: hidden;
+      background: rgba(250,247,242,0.6);
+      border: 1px solid rgba(200,190,175,0.3);
+      border-radius: 22px;
+      padding: 28px 24px;
+    }
+    .verse-card::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, #8aab8e, #b8d4ba, transparent);
+      border-radius: 3px 0 0 3px;
+    }
+    .verse-text {
+      font-family: 'Noto Serif SC', serif; font-size: clamp(15px, 4.2vw, 18px);
+      line-height: 2; color: #3a3530; letter-spacing: 0.08em;
+    }
+    .verse-author {
+      font-size: 12px; color: #a09888; letter-spacing: 0.1em; margin-top: 10px;
+    }
+    .verse-refresh {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; border-radius: 10px;
+      background: rgba(138,171,142,0.12); border: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s; font-size: 14px;
+    }
+    .verse-refresh:active { transform: scale(0.9) rotate(180deg); }
+
+    /* 健康贴士 */
+    .tip-card { position: relative; overflow: hidden; }
+    .tip-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #8aab8e, #b8d4ba);
+    }
+    .tip-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(14px, 3.8vw, 16px); line-height: 1.85; color: #3a3530;
+    }
+    .tip-narrative {
+      font-size: 12px; color: #8aab8e; line-height: 1.7; margin-top: 8px;
+      font-style: italic; letter-spacing: 0.02em;
+    }
+
+    /* 步数环 */
+    .steps-ring { position: relative; width: 85px; height: 85px; flex-shrink: 0; }
+    .steps-ring svg { transform: rotate(-90deg); }
+    .ring-bg  { fill: none; stroke: #e8f0e9; stroke-width: 7; }
+    .ring-fill {
+      fill: none; stroke: #8aab8e; stroke-width: 7; stroke-linecap: round;
+      stroke-dasharray: 220; stroke-dashoffset: var(--offset, 220);
+      transition: stroke-dashoffset 1.4s var(--ease-out-expo);
+    }
+    .steps-center {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .steps-narrative {
+      font-size: 11px; color: #8aab8e; line-height: 1.65; margin-top: 6px;
+    }
+
+    /* 指标 */
+    .metric-item { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; }
+    .metric-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(138,171,142,0.12); border-radius: 10px; font-size: 18px; }
+    .metric-label { font-size: 10px; color: #8aab8e; letter-spacing: 0.05em; }
+    .metric-value { font-family: 'Noto Serif SC', serif; font-size: 14px; font-weight: 600; color: #3a3530; }
+
+    .weather-advice {
+      padding: 11px 15px; background: rgba(138,171,142,0.1);
+      border-radius: 13px; border-left: 3px solid #8aab8e;
+      font-size: 13px; color: #5a6e5c; line-height: 1.65;
+    }
+
+    /* 音乐控制 */
+    .music-btn {
+      width: 36px; height: 36px; border-radius: 12px;
+      background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.7);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s; font-size: 16px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .music-btn:active { transform: scale(0.9); }
+    .music-btn.playing { background: rgba(138,171,142,0.2); border-color: rgba(138,171,142,0.4); }
+    .music-panel {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
+      background: rgba(250,247,242,0.96);
+      border-top: 1px solid rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+      box-shadow: 0 -4px 30px rgba(58,53,48,0.08);
+      transform: translateY(100%);
+      transition: transform 0.35s var(--ease-out-expo);
+    }
+    .music-panel.open { transform: translateY(0); }
+    .music-panel-bar {
+      width: 36px; height: 4px; background: rgba(160,152,136,0.3);
+      border-radius: 2px; margin: 0 auto 14px;
+    }
+    .track-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border-radius: 14px;
+      cursor: pointer; transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .track-item:hover, .track-item.active {
+      background: rgba(138,171,142,0.1);
+      border-color: rgba(138,171,142,0.25);
+    }
+    .track-icon { font-size: 20px; flex-shrink: 0; }
+    .track-name { font-size: 13px; color: #3a3530; }
+    .track-desc { font-size: 10px; color: #a09888; margin-top: 1px; }
+
+    /* 打卡 */
+    .weekday-pill {
+      display: inline-block; padding: 3px 13px;
+      background: rgba(138,171,142,0.16); border-radius: 999px;
+      font-size: 12px; color: #5a6e5c; letter-spacing: 0.08em;
+    }
+
+    /* 用户名芯片 */
+    .user-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 12px; border-radius: 999px;
+      background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      font-size: 12px; color: #3a3530; cursor: pointer; transition: transform 0.2s;
+    }
+    .user-chip:active { transform: scale(0.95); }
+
+    /* 退出面板 */
+    #logout-panel {
+      display: none; position: fixed; inset: 0; z-index: 800; align-items: flex-end;
+    }
+    #logout-panel.open { display: flex; }
+    #logout-overlay {
+      position: absolute; inset: 0; background: rgba(58,53,48,0.28);
+      animation: fadeIn 0.25s ease both;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    #logout-sheet {
+      position: relative; z-index: 1; width: 100%;
+      background: rgba(250,247,242,0.97); border-radius: 24px 24px 0 0;
+      padding: 28px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.8); border-bottom: none;
+      box-shadow: 0 -8px 40px rgba(58,53,48,0.12);
+      animation: sheetUp 0.35s var(--ease-out-expo) both;
+    }
+    @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    #logout-sheet.exit { animation: sheetDown 0.3s var(--ease-out-quart) forwards; }
+    @keyframes sheetDown { from { transform: translateY(0); } to { transform: translateY(110%); } }
+
+    .persist-badge {
+      display: inline-flex; align-items: center; gap: 3px; padding: 2px 9px;
+      background: rgba(138,171,142,0.1); border-radius: 999px;
+      font-size: 10px; color: #8aab8e; letter-spacing: 0.04em;
+    }
+
+    .footer-text {
+      font-family: 'Noto Serif SC', serif; font-size: 12px; color: #8aab8e;
+      letter-spacing: 0.06em; text-align: center;
+    }
+    .heart-beat { display: inline-block; animation: heartbeat 2s ease-in-out infinite; }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); } 14% { transform: scale(1.25); }
+      28% { transform: scale(1); } 42% { transform: scale(1.15); } 56% { transform: scale(1); }
+    }
+
+    .scroll-hint {
+      display: flex; flex-direction: column; align-items: center; gap: 4px; opacity: 0.45;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+    .api-notice { font-size: 11px; color: #a09888; text-align: center; line-height: 1.6; }
+
+    @supports not (padding-top: env(safe-area-inset-top)) { .pt-safe-top { padding-top: 0; } }
+    @supports (padding-top: env(safe-area-inset-top)) { .pt-safe-top { padding-top: env(safe-area-inset-top); } }
+
+    /* 音乐条动画 */
+    .music-bars { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+    .music-bars span {
+      width: 3px; border-radius: 1px; background: #8aab8e;
+      animation: barPulse 0.8s ease-in-out infinite alternate;
+    }
+    .music-bars span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+    .music-bars span:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+    .music-bars span:nth-child(3) { height: 4px;  animation-delay: 0.3s; }
+    .music-bars span:nth-child(4) { height: 12px; animation-delay: 0.1s; }
+    @keyframes barPulse { from { opacity: 0.4; } to { opacity: 1; } }
+    .music-bars.paused span { animation-play-state: paused; opacity: 0.3; }
+
+    /* 水波动画 */
+    @keyframes waterWave {
+      0%   { transform: translateX(0) translateY(0); }
+      50%  { transform: translateX(-20px) translateY(-2px); }
+      100% { transform: translateX(0) translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--                    登录页面                            -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-bg" aria-hidden="true">
+    <div class="login-orb" style="--clr:rgba(255,255,200,0.7);--dur:9s;--dx:20px;--dy:-25px;--op:0.35;width:300px;height:300px;top:-80px;right:-60px;"></div>
+    <div class="login-orb" style="--clr:rgba(138,171,142,0.5);--dur:12s;--dx:-15px;--dy:20px;--op:0.28;width:250px;height:250px;bottom:-50px;left:-40px;"></div>
+    <div class="login-orb" style="--clr:rgba(232,208,200,0.6);--dur:7s;--dx:10px;--dy:-10px;--op:0.22;width:180px;height:180px;top:40%;right:10%;"></div>
+    <div id="petals-container"></div>
+  </div>
+
+  <div class="login-card" role="main" aria-label="登录页面">
+    <div class="login-logo" style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:32px;">
+      <div class="login-logo-icon">🌿</div>
+      <div style="text-align:center">
+        <p class="login-title">Mrs. JIA's Space</p>
+        <p class="login-subtitle" style="margin-top:5px">妈妈的健康雅致空间</p>
+        <p class="login-quote">「 愿你被这世界温柔以待 」</p>
+      </div>
+    </div>
+
+    <form id="login-form" onsubmit="handleLogin(event)" novalidate>
+      <div class="login-field" style="animation: fadeUp 0.6s var(--ease-out-expo) 0.55s both; opacity:0;">
+        <span class="login-field-icon">👤</span>
+        <input id="login-username" class="login-input" type="text"
+               placeholder="请输入账号" autocomplete="username" />
+      </div>
+      <div class="login-field" style="animation: fadeUp 0.6s var(--ease-out-expo) 0.65s both; opacity:0; position:relative;">
+        <span class="login-field-icon">🔒</span>
+        <input id="login-password" class="login-input" type="password"
+               placeholder="请输入密码" autocomplete="current-password" />
+        <span class="eye-toggle" id="eye-toggle" onclick="togglePwd()" role="button" aria-label="显示/隐藏密码">👁️</span>
+      </div>
+
+      <div class="login-error" id="login-error" role="alert">
+        <span>⚠️</span>
+        <span id="login-error-msg">账号或密码不正确，请重试</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;animation:fadeUp 0.6s var(--ease-out-expo) 0.7s both;opacity:0;">
+        <button type="button" id="remember-btn" onclick="toggleRemember()"
+                role="checkbox" aria-checked="true"
+                style="width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#8aab8e,#b8d4ba);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;">
+          <span id="remember-check" style="color:#fff;font-size:12px;line-height:1">✓</span>
+        </button>
+        <span style="font-size:12px;color:#6b6560">记住登录状态</span>
+        <span style="flex:1;"></span>
+        <span class="persist-badge">💾 数据本地保存</span>
+      </div>
+
+      <button type="submit" class="login-btn" id="login-btn"
+              style="animation: fadeUp 0.6s var(--ease-out-expo) 0.75s both; opacity:0;">
+        <span id="login-btn-text">进入空间</span>
+      </button>
+    </form>
+
+    <p class="login-hint">由 Jia 亲手设计 · 送给最亲爱的妈妈</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--                    主应用页面                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="app-screen" style="display:none">
+
+  <!-- HERO 区域（含每日古诗） -->
+  <section class="hero-section px-5 pt-safe-top pb-8">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="light-orb" style="--clr:#ffffff;--dur:7s;--dy:-18px;--dx:10px;--op:0.35;width:160px;height:160px;top:12%;right:8%;"></div>
+      <div class="light-orb" style="--clr:#c8deca;--dur:9s;--dy:12px;--dx:-8px;--op:0.22;width:100px;height:100px;top:50%;left:5%;"></div>
+      <div class="light-orb" style="--clr:#f0e0d4;--dur:6s;--dy:-10px;--dx:12px;--op:0.20;width:80px;height:80px;bottom:20%;right:20%;"></div>
+    </div>
+
+    <header class="relative z-10 flex items-center justify-between pt-4">
+      <div class="fade-up" style="--delay:0.05s;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.65);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Noto Serif SC',serif;font-size:13px;letter-spacing:0.05em;color:#3a3530;box-shadow:0 2px 12px rgba(138,171,142,0.12);cursor:pointer;transition:transform 0.2s;" onclick="this.style.transform='scale(0.97)'" onmouseup="this.style.transform=''">
+        <span style="font-size:15px">🌿</span>
+        <span>Mrs. JIA's</span>
+      </div>
+      <div class="flex items-center gap-2 fade-up" style="--delay:0.15s">
+        <span id="weekday-display" class="weekday-pill">加载中…</span>
+        <div class="music-btn" id="music-toggle-btn" onclick="toggleMusicPanel()" aria-label="音乐">
+          <div class="music-bars paused" id="music-bars"><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="user-chip" onclick="openLogout()" aria-label="账号设置">
+          <span style="font-size:13px">👩</span>
+          <span id="user-display-name">海英</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 每日古诗/雅言 -->
+    <div class="relative z-10 flex flex-col items-center text-center py-8">
+      <div class="fade-up" style="--delay:0.2s">
+        <div class="verse-card" style="max-width:340px;text-align:left;">
+          <button class="verse-refresh" onclick="refreshVerse()" aria-label="换一句">🔄</button>
+          <p class="verse-text" id="verse-text">正在为您挑选一句雅言…</p>
+          <p class="verse-author" id="verse-author">— 每日雅言</p>
+        </div>
+      </div>
+
+      <div class="fade-up mt-6" style="--delay:0.38s">
+        <p style="font-family:'Noto Serif SC',serif;font-size:clamp(22px,6.5vw,34px);font-weight:600;color:#3a3530;line-height:1.35;letter-spacing:0.02em;" id="hero-date">5月10日</p>
+        <p style="font-size:clamp(12px,3.5vw,14px);color:#6b6560;font-weight:300;letter-spacing:0.08em;margin-top:6px;" id="hero-greeting">美好的一天</p>
+      </div>
+
+      <div class="fade-up mt-8" style="--delay:0.55s">
+        <div class="divider-elegant"><span>向下探索</span></div>
+      </div>
+
+      <!-- 装饰圆 -->
+      <div class="fade-up mt-8" style="--delay:0.65s">
+        <div style="width:min(200px,60vw);height:min(200px,60vw);border-radius:50%;position:relative;overflow:hidden;
+          background:radial-gradient(circle at 40% 35%,rgba(255,255,230,0.8) 0%,rgba(200,230,200,0.5) 40%,rgba(150,190,155,0.3) 70%,rgba(130,170,140,0.15) 100%);
+          box-shadow:0 8px 40px rgba(138,171,142,0.2),0 2px 0 rgba(255,255,255,0.4) inset;border:1px solid rgba(255,255,255,0.5);">
+          <svg viewBox="0 0 200 200" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.45">
+            <path d="M100 180 C100 180 92 140 76 108 C60 76 44 62 50 38" stroke="rgba(80,110,70,0.5)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M100 180 C100 180 108 145 122 115 C136 85 152 68 144 44" stroke="rgba(80,110,70,0.45)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M50 38 C34 18 14 23 20 44 C26 62 50 38 50 38Z" fill="rgba(100,150,100,0.28)"/>
+            <path d="M144 44 C158 24 178 30 170 50 C164 64 144 44 144 44Z" fill="rgba(100,150,100,0.25)"/>
+            <path d="M76 108 C62 98 56 84 65 77 C74 71 76 108 76 108Z" fill="rgba(120,170,120,0.22)"/>
+            <path d="M122 115 C136 104 144 90 135 83 C126 77 122 115 122 115Z" fill="rgba(120,170,120,0.2)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative z-10 flex justify-center pb-2">
+      <div class="scroll-hint fade-up" style="--delay:0.9s" aria-hidden="true">
+        <span style="color:#8aab8e;font-size:10px;letter-spacing:0.1em">继续探索</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:#8aab8e"><path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 功能看板 -->
+  <main class="px-4 pb-20 space-y-5" style="max-width:500px;margin:0 auto;">
+
+    <!-- 天气卡（含文字叙述） -->
+    <div class="glass-card p-5 card-reveal" style="--reveal-delay:0s" id="weather-card">
+      <div class="flex items-center justify-between mb-1">
+        <h2 style="font-family:'Noto Serif SC',serif;font-size:13px;color:#8aab8e;letter-spacing:0.1em">今日天气</h2>
+        <span class="text-xs" style="color:#a09888" id="weather-location">正在定位…</span>
+      </div>
+      <p style="font-size:11px;color:#b0a898;margin-bottom:12px;letter-spacing:0.03em" id="weather-narrative">天气数据加载中，稍候为您播报…</p>
+      <div id="weather-body">
+        <div id="weather-loading" class="weather-loading">
+          <div class="dot-pulse"><span></span><span></span><span></span></div>
+          <span>正在获取天气数据…</span>
+        </div>
+        <div id="weather-data" class="hidden">
+          <div class="flex items-center gap-4 mb-3">
+            <div class="weather-icon-wrap"><span id="weather-icon" style="font-size:32px">☀️</span></div>
+            <div class="flex-1">
+              <div class="flex items-end gap-2">
+                <span id="weather-temp" style="font-family:'Noto Serif SC',serif;font-size:2.8rem;font-weight:600;color:#3a3530;line-height:1">--</span>
+                <span style="font-size:1.1rem;color:#6b6560;margin-bottom:4px">°C</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1">
+                <span id="weather-text" style="font-size:14px;color:#6b6560">--</span>
+                <span class="weather-badge" style="background:rgba(138,171,142,0.15);color:#5a7a5e">UV <span id="uv-value">--</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 pt-3" style="border-top:1px solid rgba(138,171,142,0.12)">
+            <div class="metric-item"><div class="metric-icon">💧</div><span class="metric-value" id="weather-humidity">--%</span><span class="metric-label">湿度</span></div>
+            <div class="metric-item"><div class="metric-icon">💨</div><span class="metric-value" id="weather-wind">--</span><span class="metric-label">风速</span></div>
+            <div class="metric-item"><div class="metric-icon">🌡️</div><span class="metric-value" id="weather-feelslike">--°</span><span class="metric-label">体感</span></div>
+            <div class="metric-item"><div class="metric-icon">👁️</div><span class="metric-value" id="weather-vis">--km</span><span class="metric-label">能见度</span></div>
+          </div>
+        </div>
+        <div id="weather-advice-wrap" class="weather-advice mt-3 hidden"><span id="weather-advice-text"></span></div>
+      </div>
+      <div id="weather-api-notice" class="hidden mt-3">
+        <div class="api-notice">☁️ 天气数据暂未接入<br><span style="color:#c0b8b0">填入和风天气 Key 后自动启用</span></div>
+      </div>
+    </div>
+
+    <!-- 古诗雅言卡（每日更新） -->
+    <div class="verse-card card-reveal" style="--reveal-delay:0.05s" id="daily-verse-card">
+      <button class="verse-refresh" onclick="refreshVerse()" aria-label="换一句" title="换一句">🔄</button>
+      <p style="font-size:10px;color:#b0a898;letter-spacing:0.12em;margin-bottom:10px;font-family:'Noto Serif SC',serif;">— 每日雅言 · 滋养心灵 —</p>
+      <p class="verse-text" id="verse-card-text">正在为您挑选一句雅言…</p>
+      <p class="verse-author" id="verse-card-author"></p>
+      <p style="font-size:11px;color:#b8a898;line-height:1.7;margin-top:12px;font-style:italic;" id="verse-reflection">一句雅言，一份宁静。</p>
+    </div>
+
+    <!-- 健康贴士卡（含文字叙述） -->
+    <div class="glass-card p-5 tip-card card-reveal" style="--reveal-delay:0.1s" id="tip-card">
+      <div class="flex items-center justify-between mb-3">
+        <h2 style="font-family:'Noto Serif SC',serif;font-size:13px;color:#8aab8e;letter-spacing:0.1em">每日健康贴士</h2>
+        <span style="font-family:'Noto Serif SC',serif;font-size:11px;color:#8aab8e;letter-spacing:0.1em" id="tip-day-label">DAY --</span>
+      </div>
+      <p class="tip-text" id="tip-content" style="min-height:60px">正在为您准备今日贴士…</p>
+      <p class="tip-narrative" id="tip-narrative">健康是一种态度，从每一个小习惯开始。</p>
+      <div class="flex items-center justify-between mt-4 pt-3" style="border-top:1px solid rgba(138,171,142,0.12)">
+        <div class="flex gap-2">
+          <span id="tip-tag-1" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs" style="background:rgba(138,171,142,0.12);color:#5a7a5e">🌿 健康</span>
+          <span id="tip-tag-2" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs" style="background:rgba(232,208,200,0.3);color:#9a6e5e">🌸 关爱</span>
+        </div>
+        <button onclick="nextTip()" aria-label="换一条建议"
+                class="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs"
+                style="background:rgba(138,171,142,0.15);color:#5a7a5e;border:1px solid rgba(138,171,142,0.25);transition:transform 0.15s"
+                onmousedown="this.style.transform='scale(0.92)'" onmouseup="this.style.transform=''">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10 2C8.5 1 6.5 0.5 4.5 1.5C2 2.8 1 5.5 2 8L1 7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M2 8.5L3.5 9.5L4 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          换一条
+        </button>
+      </div>
+    </div>
+
+    <!-- 今日活动卡（含文字叙述） -->
+    <div class="glass-card p-5 card-reveal" style="--reveal-delay:0.2s" id="steps-card">
+      <div class="flex items-center justify-between mb-1">
+        <h2 style="font-family:'Noto Serif SC',serif;font-size:13px;color:#8aab8e;letter-spacing:0.1em">今日活动</h2>
+        <span class="persist-badge">💾 每日记录</span>
+      </div>
+      <p style="font-size:11px;color:#b0a898;margin-bottom:14px;letter-spacing:0.03em" id="steps-narrative">每一步都是对自己最好的礼物，今天走了多少步呢？</p>
+      <div class="flex items-center gap-5">
+        <div class="steps-ring" id="steps-ring">
+          <svg width="85" height="85" viewBox="0 0 85 85">
+            <circle class="ring-bg" cx="42.5" cy="42.5" r="35"/>
+            <circle class="ring-fill" cx="42.5" cy="42.5" r="35" id="ring-fill-el" style="--offset:220"/>
+          </svg>
+          <div class="steps-center">
+            <span style="font-family:'Noto Serif SC',serif;font-size:1.15rem;font-weight:600;color:#3a3530;line-height:1" id="steps-value">--</span>
+            <span style="font-size:9px;color:#8aab8e;margin-top:1px">步</span>
+          </div>
+        </div>
+        <div class="flex-1 space-y-3">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <span style="font-size:12px;color:#8aab8e">距目标</span>
+              <span style="font-size:12px;font-weight:600;color:#3a3530" id="steps-goal-text">目标 8000 步</span>
+            </div>
+            <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(138,171,142,0.15)">
+              <div id="steps-progress-bar" class="h-full rounded-full" style="width:0%;background:linear-gradient(90deg,#8aab8e,#b8d4ba);transition:width 1.4s var(--ease-out-expo)"></div>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div><div class="metric-label">消耗热量</div><div class="metric-value text-sm" id="steps-calories">-- kcal</div></div>
+            <div><div class="metric-label">活动时长</div><div class="metric-value text-sm" id="steps-duration">-- 分钟</div></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#b8a898;line-height:1.65;margin-top:12px;font-style:italic;" id="steps-advice">💡 饭后散步十分钟，助消化又舒心。</p>
+    </div>
+
+    <!-- 本周打卡卡（含文字叙述） -->
+    <div class="glass-card p-5 card-reveal" style="--reveal-delay:0.3s" id="week-card">
+      <div class="flex items-center justify-between mb-1">
+        <h2 style="font-family:'Noto Serif SC',serif;font-size:13px;color:#8aab8e;letter-spacing:0.1em">本周打卡</h2>
+        <span id="week-streak" class="persist-badge">🌱 <span id="streak-text">坚持中</span></span>
+      </div>
+      <p style="font-size:11px;color:#b0a898;margin-bottom:14px;letter-spacing:0.03em">一份坚持，一份收获。点击今天，记录这份美好 ✨</p>
+      <div class="flex justify-between" id="week-calendar"></div>
+      <div class="mt-4 pt-3" style="border-top:1px solid rgba(138,171,142,0.12)">
+        <p style="font-size:12px;color:#6b6560;line-height:1.75" id="checkin-narrative">📅 打卡是一种温柔的仪式感，记录每一个对自己负责的日子。连续打卡，让健康成为最自然的生活习惯。</p>
+      </div>
+    </div>
+
+    <!-- 饮水追踪卡（含文字叙述） -->
+    <div class="glass-card p-5 card-reveal" style="--reveal-delay:0.4s" id="water-card">
+      <div class="flex items-center justify-between mb-1">
+        <h2 style="font-family:'Noto Serif SC',serif;font-size:13px;color:#8aab8e;letter-spacing:0.1em">今日饮水</h2>
+        <span class="persist-badge">💾 关闭不丢失</span>
+      </div>
+      <p style="font-size:11px;color:#b0a898;margin-bottom:12px;letter-spacing:0.03em" id="water-narrative">充足的水分让肌肤水润、精神饱满。今天喝够水了吗？</p>
+      <div class="flex items-end gap-3 mb-4">
+        <span style="font-family:'Noto Serif SC',serif;font-size:2.8rem;font-weight:600;color:#3a3530;line-height:1;transition:all 0.4s var(--ease-out-expo)" id="water-current">0</span>
+        <span style="font-size:1rem;color:#8aab8e;margin-bottom:4px">/ 1500 ml</span>
+      </div>
+      <div class="flex gap-2 mb-4 items-end" id="water-cups"></div>
+      <div class="flex gap-2">
+        <button onclick="addWater(200)" aria-label="喝了200ml水"
+                class="flex-1 py-3 rounded-2xl text-sm"
+                style="background:rgba(138,171,142,0.15);color:#5a7a5e;border:1px solid rgba(138,171,142,0.25);transition:transform 0.12s,box-shadow 0.12s"
+                onmousedown="this.style.transform='scale(0.94)';this.style.boxShadow='none'"
+                onmouseup="this.style.transform='';this.style.boxShadow=''">
+          💧 喝了 200ml
+        </button>
+        <button onclick="addWater(350)" aria-label="喝了350ml水"
+                class="flex-1 py-3 rounded-2xl text-sm"
+                style="background:rgba(138,171,142,0.28);color:#3a6a3e;border:1px solid rgba(138,171,142,0.4);transition:transform 0.12s"
+                onmousedown="this.style.transform='scale(0.94)'" onmouseup="this.style.transform=''">
+          🥤 喝了 350ml
+        </button>
+        <button id="reset-water-btn" onclick="resetWater(event)" aria-label="重置饮水记录"
+                class="px-3 py-3 rounded-2xl text-xs"
+                style="background:rgba(160,152,136,0.1);color:#a09888;border:1px solid rgba(160,152,136,0.2);transition:all 0.2s;min-width:52px">
+          重置
+        </button>
+      </div>
+      <p style="font-size:10px;color:#b8a898;text-align:center;margin-top:10px;letter-spacing:0.04em">
+        ✅ 饮水数据每天独立保存，关闭网页后下次打开仍然保留
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-10 px-6 text-center card-reveal" style="--reveal-delay:0.5s">
+    <div class="divider-elegant"><span>· 尾声 ·</span></div>
+    <p class="footer-text mb-2" style="margin-top:16px">由 Jia 亲手设计，送给最亲爱的妈妈</p>
+    <p class="footer-text" style="font-size:11px;color:#b0a898">愿每一天都温柔以待 <span class="heart-beat">🌸</span></p>
+    <p class="footer-text mt-4" style="font-size:10px;color:#c8c0b4">Mrs. JIA's Space · 雅致健康空间</p>
+  </footer>
+</div>
+
+<!-- 退出登录底部弹窗 -->
+<div id="logout-panel" role="dialog" aria-label="账号设置" aria-modal="true">
+  <div id="logout-overlay" onclick="closeLogout()"></div>
+  <div id="logout-sheet">
+    <div style="width:36px;height:4px;background:rgba(160,152,136,0.3);border-radius:2px;margin:0 auto 24px;"></div>
+    <div class="flex items-center gap-3 mb-6">
+      <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#8aab8e,#b8d4ba);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">👩</div>
+      <div>
+        <p style="font-family:'Noto Serif SC',serif;font-size:16px;font-weight:600;color:#3a3530" id="sheet-username">高海英</p>
+        <p style="font-size:12px;color:#8aab8e;margin-top:2px">我的健康雅致空间</p>
+      </div>
+    </div>
+    <div style="background:rgba(138,171,142,0.08);border-radius:16px;padding:14px 16px;margin-bottom:16px;">
+      <p style="font-size:12px;color:#6b6560;line-height:1.8">
+        💾 <strong>所有数据均保存在本设备浏览器中</strong><br>
+        · 饮水记录：按日期保存，永不丢失<br>
+        · 打卡记录：按周保存，长期留存<br>
+        · 登录状态：下次打开自动进入
+      </p>
+    </div>
+    <button onclick="doLogout()"
+            style="width:100%;padding:14px;border-radius:16px;background:rgba(200,80,60,0.08);border:1px solid rgba(200,80,60,0.2);color:#c05040;font-size:14px;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em"
+            onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform=''">
+      退出登录
+    </button>
+    <button onclick="closeLogout()"
+            style="width:100%;margin-top:10px;padding:14px;border-radius:16px;background:rgba(138,171,142,0.12);border:none;color:#5a7a5e;font-size:14px;cursor:pointer;transition:all 0.2s"
+            onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform=''">
+      取消
+    </button>
+  </div>
+</div>
+
+<!-- 音乐面板 -->
+<div class="music-panel" id="music-panel">
+  <div class="music-panel-bar"></div>
+  <p style="font-family:'Noto Serif SC',serif;font-size:13px;color:#8aab8e;letter-spacing:0.08em;margin-bottom:14px;text-align:center;">🎵 伴读音乐</p>
+  <div class="space-y-2" id="track-list">
+    <div class="track-item" onclick="selectTrack(0)" id="track-0">
+      <span class="track-icon">🎼</span>
+      <div><p class="track-name">宁静钢琴</p><p class="track-desc">轻柔钢琴曲，适合阅读时光</p></div>
+    </div>
+    <div class="track-item" onclick="selectTrack(1)" id="track-1">
+      <span class="track-icon">🌧️</span>
+      <div><p class="track-name">雨声白噪音</p><p class="track-desc">细雨声，助你放松安神</p></div>
+    </div>
+    <div class="track-item" onclick="selectTrack(2)" id="track-2">
+      <span class="track-icon">🌊</span>
+      <div><p class="track-name">海浪声</p><p class="track-desc">海浪轻拍，带去一日疲惫</p></div>
+    </div>
+    <div class="track-item" onclick="selectTrack(3)" id="track-3">
+      <span class="track-icon">🎻</span>
+      <div><p class="track-name">古风弦乐</p><p class="track-desc">古筝与弦乐，雅致悠扬</p></div>
+    </div>
+    <div class="track-item" onclick="selectTrack(4)" id="track-4">
+      <span class="track-icon">🔥</span>
+      <div><p class="track-name">壁炉白噪音</p><p class="track-desc">噼啪火声，温暖陪伴</p></div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-top:16px;">
+    <button onclick="togglePlay()" id="play-btn" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#8aab8e,#b8d4ba);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(138,171,142,0.35);font-size:16px;color:#fff;flex-shrink:0;">▶️</button>
+    <div class="flex-1">
+      <p style="font-size:12px;color:#3a3530;font-weight:500" id="now-playing">选择一首音乐开始</p>
+      <p style="font-size:10px;color:#a09888;margin-top:2px" id="now-playing-desc">点击上方曲目选择</p>
+    </div>
+    <span style="font-size:11px;color:#b8a898" id="volume-label">🔊</span>
+  </div>
+  <input type="range" min="0" max="100" value="40" id="volume-slider" oninput="setVolume(this.value)"
+         style="width:100%;margin-top:10px;accent-color:#8aab8e;height:4px;" />
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--                  JavaScript                             -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ──────────────────────────────────────────────
+// 配置区
+// ──────────────────────────────────────────────
+const CONFIG = {
+  QWEATHER_KEY: '',
+  CITY: 'auto',
+  STEPS_GOAL: 8000,
+  WATER_GOAL: 1500,
+};
+
+const AUTH = {
+  username: '高海英',
+  password: '18131322363',
+};
+
+const SESSION_KEY  = 'jia_health_session';
+const REMEMBER_KEY = 'jia_health_remember';
+
+let rememberMe = true;
+
+// ──────────────────────────────────────────────
+// 每日古诗 / 雅言数据库（每天自动更新）
+// ──────────────────────────────────────────────
+const DAILY_VERSES = [
+  { text: '采菊东篱下，悠然见南山。', author: '陶渊明《饮酒·其五》', reflection: '在忙碌中，也别忘了停下来，看看窗外的风景。' },
+  { text: '山气日夕佳，飞鸟相与还。', author: '陶渊明《饮酒·其五》', reflection: '黄昏时分，与飞鸟一同归家，是一种温柔的仪式。' },
+  { text: '问君何能尔？心远地自偏。', author: '陶渊明《饮酒·其五》', reflection: '心若安宁，处处皆是桃花源。' },
+  { text: '晨起开门雪满山，雪晴云淡日光寒。', author: '郑燮《山中雪后》', reflection: '雪后初晴，阳光虽寒，却格外清透。' },
+  { text: '但愿人长久，千里共婵娟。', author: '苏轼《水调歌头》', reflection: '相隔再远，也能共赏同一轮明月。' },
+  { text: '竹外桃花三两枝，春江水暖鸭先知。', author: '苏轼《惠崇春江晚景》', reflection: '春天的讯息，总是最先被细心的人捕捉到。' },
+  { text: '人间有味是清欢。', author: '苏轼《浣溪沙》', reflection: '最动人的滋味，往往是最清淡的那种。' },
+  { text: '落红不是无情物，化作春泥更护花。', author: '龚自珍《己亥杂诗》', reflection: '每一次的付出，都会在时光里悄悄开花。' },
+  { text: '疏影横斜水清浅，暗香浮动月黄昏。', author: '林逋《山园小梅》', reflection: '最美好的事物，往往在静谧中静静散发香气。' },
+  { text: '一琴一鹤白云底，万壑千岩明月中。', author: '古雅言', reflection: '简单的生活，配上悠然的心境，便是最好。' },
+  { text: '半窗疏影梅花月，一盏清茶竹叶风。', author: '古雅言', reflection: '在茶香与梅影中，度过一个宁静的下午。' },
+  { text: '岁月本长，而忙者自促。', author: '《菜根谭》', reflection: '慢下来，才能感受到时间给与的礼物。' },
+  { text: '宠辱不惊，闲看庭前花开花落。', author: '《菜根谭》', reflection: '内心的平静，是最珍贵的财富。' },
+  { text: '向阳而生，逐光而行。', author: '古雅言', reflection: '朝着阳光走，影子就会落在身后。' },
+  { text: '心若向阳，无畏悲伤。', author: '古雅言', reflection: '保持一颗温暖的心，世界也会对你温柔。' },
+  { text: '一花一世界，一叶一菩提。', author: '《华严经》', reflection: '每一个微小的瞬间，都藏着整个宇宙的秘密。' },
+  { text: '静以修身，俭以养德。', author: '诸葛亮《诫子书》', reflection: '宁静与俭朴，是滋养心灵最好的方式。' },
+  { text: '非淡泊无以明志，非宁静无以致远。', author: '诸葛亮《诫子书》', reflection: '放下浮躁，才能看清真正想去的方向。' },
+  { text: '春风如醇酒，著物物不知。', author: '程致道《过红梅阁》', reflection: '春风悄悄而来，温暖了整个大地。' },
+  { text: '小楼一夜听春雨，深巷明朝卖杏花。', author: '陆游《临安春雨初霁》', reflection: '听一场春雨，等待明天巷子里杏花的消息。' },
+  { text: '茶烟袅细香，竹日明碎影。', author: '古雅言', reflection: '煮一壶茶，看竹影在日光下摇曳。' },
+];
+
+// ──────────────────────────────────────────────
+// 白噪音 / 音乐（使用 Web Audio API 生成）
+// ──────────────────────────────────────────────
+let audioCtx = null;
+let currentSource = null;
+let isPlaying = false;
+let currentTrack = -1;
+let currentGainNode = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+// 生成白噪音（雨声/海浪/壁炉用）
+function createNoiseBuffer(ctx, type) {
+  const sr = ctx.sampleRate;
+  const len = sr * 30; // 30秒循环
+  const buf = ctx.createBuffer(2, len, sr);
+  for (let ch = 0; ch < 2; ch++) {
+    const data = buf.getChannelData(ch);
+    let last = 0;
+    for (let i = 0; i < len; i++) {
+      if (type === 'rain') {
+        // 雨声：高频噪声 + 偶尔水滴
+        const n = (Math.random() * 2 - 1) * 0.15;
+        data[i] = n + (Math.random() < 0.001 ? (Math.random() - 0.5) * 0.6 : 0);
+      } else if (type === 'ocean') {
+        // 海浪：低频噪声 + 包络
+        const t = i / sr;
+        const env = (Math.sin(t * 0.5 * Math.PI * 2) + 1) / 2;
+        data[i] = (Math.random() * 2 - 1) * 0.18 * env;
+      } else if (type === 'fire') {
+        // 壁炉：低频噪声 + 偶尔噼啪
+        const n = (Math.random() * 2 - 1) * 0.12;
+        data[i] = n + (Math.random() < 0.0003 ? (Math.random() - 0.5) * 0.8 : 0);
+      } else {
+        data[i] = (Math.random() * 2 - 1) * 0.1;
+      }
+    }
+  }
+  return buf;
+}
+
+// 生成钢琴音符（宁静钢琴用）
+function createPianoBuffer(ctx) {
+  const sr = ctx.sampleRate;
+  const len = sr * 20;
+  const buf = ctx.createBuffer(2, len, sr);
+  const notes = [261.6, 329.6, 392.0, 523.3, 440.0, 349.2]; // C E G C' A F
+  for (let ch = 0; ch < 2; ch++) {
+    const data = buf.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      let sample = 0;
+      const t = i / sr;
+      notes.forEach((freq, idx) => {
+        const start = idx * 3;
+        if (t > start && t < start + 2.8) {
+          const env = Math.exp(-(t - start) * 1.5);
+          sample += Math.sin(2 * Math.PI * freq * (t - start)) * env * 0.08;
+        }
+      });
+      // 加入柔和的泛音
+      sample += Math.sin(2 * Math.PI * 130.8 * t) * Math.exp(-t * 0.3) * 0.04;
+      data[i] = sample;
+    }
+  }
+  return buf;
+}
+
+// 生成古风弦乐
+function createGuzhengBuffer(ctx) {
+  const sr = ctx.sampleRate;
+  const len = sr * 25;
+  const buf = ctx.createBuffer(2, len, sr);
+  const pentatonic = [261.6, 293.7, 329.6, 392.0, 440.0]; // 五声音阶
+  for (let ch = 0; ch < 2; ch++) {
+    const data = buf.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      let sample = 0;
+      const t = i / sr;
+      pentatonic.forEach((freq, idx) => {
+        const start = idx * 4.5;
+        if (t > start && t < start + 4) {
+          const env = Math.exp(-(t - start) * 1.2);
+          // 加一点五度泛音
+          sample += (Math.sin(2 * Math.PI * freq * (t - start)) * 0.7
+                   + Math.sin(2 * Math.PI * freq * 1.5 * (t - start)) * 0.3) * env * 0.06;
+        }
+      });
+      data[i] = sample;
+    }
+  }
+  return buf;
+}
+
+const TRACKS = [
+  { name: '宁静钢琴', desc: '轻柔钢琴曲，适合阅读时光', type: 'piano',  bufFn: createPianoBuffer },
+  { name: '雨声白噪音', desc: '细雨声，助你放松安神', type: 'rain',   bufFn: (ctx) => createNoiseBuffer(ctx, 'rain') },
+  { name: '海浪声',   desc: '海浪轻拍，带去疲惫',   type: 'ocean',  bufFn: (ctx) => createNoiseBuffer(ctx, 'ocean') },
+  { name: '古风弦乐', desc: '古筝与弦乐，雅致悠扬', type: 'guzheng',bufFn: createGuzhengBuffer },
+  { name: '壁炉白噪音', desc: '噼啪火声，温暖陪伴', type: 'fire',   bufFn: (ctx) => createNoiseBuffer(ctx, 'fire') },
+];
+
+function ensureAudioSession() {
+  const ctx = getAudioCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+}
+
+function playTrack(trackIdx) {
+  ensureAudioSession();
+  stopTrack();
+  const ctx = getAudioCtx();
+  const track = TRACKS[trackIdx];
+  const buf = track.bufFn(ctx);
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.loop = true;
+  const gainNode = ctx.createGain();
+  gainNode.gain.value = document.getElementById('volume-slider').value / 100;
+  src.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  src.start();
+  currentSource = src;
+  currentGainNode = gainNode;
+  isPlaying = true;
+  currentTrack = trackIdx;
+  updateMusicUI();
+}
+
+function stopTrack() {
+  if (currentSource) {
+    try { currentSource.stop(); } catch(e) {}
+    currentSource = null;
+  }
+  isPlaying = false;
+  updateMusicUI();
+}
+
+function togglePlay() {
+  ensureAudioSession();
+  if (currentTrack < 0) { selectTrack(0); return; }
+  if (isPlaying) { stopTrack(); } else { playTrack(currentTrack); }
+}
+
+function selectTrack(idx) {
+  currentTrack = idx;
+  playTrack(idx);
+}
+
+function setVolume(val) {
+  if (currentGainNode) {
+    currentGainNode.gain.value = val / 100;
+  }
+  document.getElementById('volume-label').textContent = val > 0 ? '🔊' : '🔇';
+}
+
+function updateMusicUI() {
+  const btn = document.getElementById('play-btn');
+  const bars = document.getElementById('music-bars');
+  const musicBtn = document.getElementById('music-toggle-btn');
+  const nowPlaying = document.getElementById('now-playing');
+  const nowDesc = document.getElementById('now-playing-desc');
+
+  if (isPlaying && currentTrack >= 0) {
+    btn.textContent = '⏸️';
+    bars.classList.remove('paused');
+    musicBtn.classList.add('playing');
+    nowPlaying.textContent = TRACKS[currentTrack].name;
+    nowDesc.textContent = TRACKS[currentTrack].desc;
+  } else {
+    btn.textContent = '▶️';
+    bars.classList.add('paused');
+    musicBtn.classList.remove('playing');
+    if (currentTrack >= 0) {
+      nowPlaying.textContent = TRACKS[currentTrack].name;
+      nowDesc.textContent = '已暂停 · 点击播放';
+    }
+  }
+
+  // 高亮当前曲目
+  document.querySelectorAll('.track-item').forEach((el, i) => {
+    el.classList.toggle('active', i === currentTrack && isPlaying);
+  });
+}
+
+function toggleMusicPanel() {
+  const panel = document.getElementById('music-panel');
+  panel.classList.toggle('open');
+}
+
+// ──────────────────────────────────────────────
+// 古诗雅言逻辑（每天自动更新）
+// ──────────────────────────────────────────────
+function getDayVerseIndex() {
+  // 根据日期选一句，确保每天不同但稳定
+  const d = new Date();
+  const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  return dayOfYear % DAILY_VERSES.length;
+}
+
+let currentVerseIndex = getDayVerseIndex();
+
+function showVerse(idx) {
+  const v = DAILY_VERSES[idx];
+  document.getElementById('verse-text').textContent = v.text;
+  document.getElementById('verse-author').textContent = '— ' + v.author;
+  if (document.getElementById('verse-reflection'))
+    document.getElementById('verse-reflection').textContent = v.reflection;
+
+  // 同步更新卡片区
+  document.getElementById('verse-card-text').textContent = v.text;
+  document.getElementById('verse-card-author').textContent = '— ' + v.author;
+  document.getElementById('verse-reflection').textContent = v.reflection;
+}
+
+function refreshVerse() {
+  currentVerseIndex = (currentVerseIndex + 1) % DAILY_VERSES.length;
+  showVerse(currentVerseIndex);
+}
+
+// ──────────────────────────────────────────────
+// 登录逻辑（保持不变）
+// ──────────────────────────────────────────────
+function toggleRemember() {
+  rememberMe = !rememberMe;
+  const btn   = document.getElementById('remember-btn');
+  const check = document.getElementById('remember-check');
+  if (rememberMe) {
+    btn.style.background = 'linear-gradient(135deg,#8aab8e,#b8d4ba)';
+    check.textContent = '✓';
+  } else {
+    btn.style.background = 'rgba(200,190,180,0.3)';
+    check.textContent = '';
+  }
+}
+
+function togglePwd() {
+  const inp = document.getElementById('login-password');
+  const eye = document.getElementById('eye-toggle');
+  if (inp.type === 'password') { inp.type = 'text'; eye.textContent = '🙈'; }
+  else                         { inp.type = 'password'; eye.textContent = '👁️'; }
+}
+
+function isLoggedIn() {
+  return localStorage.getItem(SESSION_KEY) === 'true' ||
+         sessionStorage.getItem(SESSION_KEY) === 'true';
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const uInput = document.getElementById('login-username').value.trim();
+  const pInput = document.getElementById('login-password').value.trim();
+  const errEl  = document.getElementById('login-error');
+  const btn    = document.getElementById('login-btn');
+  errEl.classList.remove('show');
+  document.getElementById('login-username').classList.remove('error');
+  document.getElementById('login-password').classList.remove('error');
+
+  if (!uInput || !pInput) {
+    showLoginError('账号和密码不能为空');
+    if (!uInput) document.getElementById('login-username').classList.add('error');
+    if (!pInput) document.getElementById('login-password').classList.add('error');
+    return;
+  }
+  if (uInput !== AUTH.username || pInput !== AUTH.password) {
+    showLoginError('账号或密码不正确，请重试');
+    document.getElementById('login-username').classList.add('error');
+    document.getElementById('login-password').classList.add('error');
+    return;
+  }
+
+  btn.classList.add('loading');
+  document.getElementById('login-btn-text').textContent = '正在进入…';
+  if (rememberMe) { localStorage.setItem(SESSION_KEY, 'true'); }
+  else            { sessionStorage.setItem(SESSION_KEY, 'true'); }
+  setTimeout(() => enterApp(), 600);
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  document.getElementById('login-error-msg').textContent = msg;
+  el.classList.add('show');
+}
+
+function enterApp() {
+  const loginScreen = document.getElementById('login-screen');
+  const appScreen   = document.getElementById('app-screen');
+  appScreen.style.display = 'block';
+  loginScreen.classList.add('exit');
+  setTimeout(() => {
+    loginScreen.style.display = 'none';
+    appScreen.classList.add('enter');
+    initApp();
+  }, 700);
+}
+
+function openLogout() {
+  document.getElementById('logout-panel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLogout() {
+  const sheet = document.getElementById('logout-sheet');
+  sheet.classList.add('exit');
+  setTimeout(() => {
+    document.getElementById('logout-panel').classList.remove('open');
+    sheet.classList.remove('exit');
+    document.body.style.overflow = '';
+  }, 300);
+}
+
+function doLogout() {
+  localStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(SESSION_KEY);
+  closeLogout();
+  setTimeout(() => {
+    document.getElementById('app-screen').style.display = 'none';
+    document.getElementById('app-screen').classList.remove('enter');
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('login-screen').classList.remove('exit');
+    document.getElementById('login-btn').classList.remove('loading');
+    document.getElementById('login-btn-text').textContent = '进入空间';
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-error').classList.remove('show');
+  }, 350);
+}
+
+// ──────────────────────────────────────────────
+// 花瓣动效
+// ──────────────────────────────────────────────
+function spawnPetals() {
+  const container = document.getElementById('petals-container');
+  const symbols = ['🌸','🌺','🌼','🍃','✿','❀','🌷'];
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const sz   = 13 + Math.random() * 15;
+    const left = 4 + Math.random() * 92;
+    const dur  = 7 + Math.random() * 9;
+    const delay = Math.random() * 9;
+    const drift = (Math.random() - 0.5) * 110;
+    const rot  = (Math.random() > 0.5 ? 1 : -1) * (180 + Math.random() * 360);
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.cssText = `--sz:${sz}px;--dur:${dur}s;--delay:${delay}s;--drift:${drift}px;--rot:${rot}deg;left:${left}%;top:-40px;`;
+    container.appendChild(p);
+  }
+}
+
+// ──────────────────────────────────────────────
+// 健康贴士（扩充 + 古风 + 文字叙述）
+// ──────────────────────────────────────────────
+const HEALTH_TIPS = [
+  {
+    text: '今天记得多喝温水，让身体保持充盈的水分。早晨一杯温水，唤醒肠胃，一天精神满满。',
+    narrative: '温水是最好的"长寿药"，它能促进血液循环，帮助身体排出夜间积累的代谢废物。',
+    tags: ['💧 补水','🌅 晨间']
+  },
+  {
+    text: '伸展颈椎只需 5 分钟。低头向右转，停 10 秒，换方向。放松肩颈，整个人都轻盈了。',
+    narrative: '长期低头会让颈椎承受巨大压力，适时伸展，就像给脖子做了一个温柔的 SPA。',
+    tags: ['🧘 拉伸','💆 放松']
+  },
+  {
+    text: '今天试着多走 500 步吧。饭后散步 10 分钟，既助消化，又能晒到暖暖的阳光。',
+    narrative: '古人说"饭后百步走，活到九十九"，短短十分钟，是给身体最好的礼物。',
+    tags: ['🚶 步行','☀️ 晒太阳']
+  },
+  {
+    text: '深呼吸练习：吸气 4 拍，屏气 4 拍，呼气 8 拍。做 5 轮，帮助平稳情绪，改善睡眠。',
+    narrative: '呼吸是最天然的电子安定，每一次深长的呼气，都在告诉身体：你是安全的，可以放松了。',
+    tags: ['🌬️ 呼吸','😌 安神']
+  },
+  {
+    text: '绿叶蔬菜是今天的主角。菠菜、西兰花或生菜，搭配一点橄榄油，补充镁和叶酸。',
+    narrative: '深绿色蔬菜就像大自然的"多维片"，每一种颜色都是不同的营养素在向你招手。',
+    tags: ['🥦 饮食','🌿 营养']
+  },
+  {
+    text: '给眼睛放个假：每隔 40 分钟，看向 6 米外的远处保持 20 秒。保护心灵的窗户。',
+    narrative: '眼睛累了会"说话"——干涩、模糊、流泪，它们在请求你：看一看远方的绿意吧。',
+    tags: ['👁️ 护眼','⏱️ 定时']
+  },
+  {
+    text: '今晚争取 11 点前入睡。睡前 30 分钟放下手机，泡个热水脚，好好休息。',
+    narrative: '睡眠是身体最深层的修复时刻，就像大地在夜晚默默滋养明天的花朵一样。',
+    tags: ['🌙 睡眠','🛁 放松']
+  },
+  {
+    text: '笑一笑，十年少。今天找一件让你开心的事，哪怕只是看到一只可爱的猫，或闻到一阵花香。',
+    narrative: '笑容会触发大脑释放内啡肽，这是最天然、最无副作用的"快乐药"。',
+    tags: ['😊 好心情','🌸 愉悦']
+  },
+  {
+    text: '泡脚是非常好的养生习惯。用 40°C 温水泡 15 分钟，促进血液循环，改善睡眠。',
+    narrative: '古人云"睡前泡脚，胜服安眠药"，热气从脚底蔓延到全身，是这一天最温柔的结尾。',
+    tags: ['🛁 泡脚','🌙 助眠']
+  },
+  {
+    text: '今天吃点坚果吧。一小把核桃或杏仁，富含优质脂肪和维生素 E，对心脑血管很好。',
+    narrative: '坚果虽小，却浓缩了大自然的精华，就像生活里那些不起眼却很珍贵的瞬间。',
+    tags: ['🥜 坚果','❤️ 养心']
+  },
+  {
+    text: '做个简单的肩颈按摩：用指腹轻轻打圈按压颈部两侧，每次 3 分钟，缓解僵硬感。',
+    narrative: '双手是最好的按摩师，不用花钱，不用预约，随时随地给自己一份温柔的呵护。',
+    tags: ['💆 按摩','🧘 舒缓']
+  },
+  {
+    text: '午后一杯绿茶，清香怡人。绿茶中的茶多酚有助抗氧化，让皮肤更有光泽。',
+    narrative: '茶香袅袅中，给自己一个暂停的理由。慢下来，才能品出生活的真味。',
+    tags: ['🍵 茶饮','✨ 抗氧化']
+  },
+  {
+    text: '保持正确坐姿：背部贴椅、双脚平放、屏幕与眼睛同高。保护好脊椎，从现在开始。',
+    narrative: '脊椎是身体的"中轴线"，它挺直了，整个人都会更有精神和自信。',
+    tags: ['🪑 坐姿','🦴 护脊']
+  },
+  {
+    text: '今天对身边的人笑一笑吧。温暖的笑容会传染，你给出去的，终会回到你身上。',
+    narrative: '善良是一种不需要花钱却能创造巨大价值的投资，而且收获的利息是双倍的。',
+    tags: ['😊 友善','💝 分享']
+  },
+  {
+    text: '做一个简单的冥想：闭眼，只关注呼吸，什么都不想，5 分钟后睁开眼，世界都清透了。',
+    narrative: '冥想不是"什么都不做"，而是"什么都不追"——让思绪像云一样飘过，不留不住。',
+    tags: ['🧘 冥想','😌 宁静']
+  },
+];
+
+let currentTipIndex = 0;
+
+function showTip(index) {
+  const tip = HEALTH_TIPS[index];
+  const el  = document.getElementById('tip-content');
+  const nar = document.getElementById('tip-narrative');
+  el.style.cssText += 'opacity:0;transform:translateY(10px);transition:none;';
+  setTimeout(() => {
+    el.textContent = tip.text;
+    nar.textContent = tip.narrative;
+    el.style.transition = 'opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo)';
+    el.style.opacity = '1'; el.style.transform = 'translateY(0)';
+  }, 200);
+  document.getElementById('tip-day-label').textContent = `DAY ${index + 1}`;
+  document.getElementById('tip-tag-1').textContent = tip.tags[0];
+  document.getElementById('tip-tag-2').textContent = tip.tags[1];
+}
+
+function initTip() {
+  currentTipIndex = new Date().getDay();
+  showTip(currentTipIndex);
+}
+
+function nextTip() {
+  currentTipIndex = (currentTipIndex + 1) % HEALTH_TIPS.length;
+  showTip(currentTipIndex);
+}
+
+// ──────────────────────────────────────────────
+// 日期 & 问候语
+// ──────────────────────────────────────────────
+const WEEKDAYS = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+
+function initDate() {
+  const now = new Date();
+  const m = now.getMonth() + 1, d = now.getDate(), h = now.getHours(), wd = now.getDay();
+  const feels = [
+    [0,5,'月色宁静'],[5,9,'晨光微醺'],[9,12,'阳光正好'],
+    [12,14,'午后温柔'],[14,18,'光影流转'],[18,21,'夕阳余晖'],[21,24,'月色宁静']
+  ];
+  const feel = feels.find(([s,e]) => h >= s && h < e)?.[2] || '阳光正好';
+  document.getElementById('hero-date').textContent = `${m}月${d}日，${feel}`;
+
+  if (m === 5 && d === 10) {
+    document.querySelector('.login-quote') || null;
+  }
+
+  const greetings = [
+    [0,5,'夜深了，好好休息吧 🌙'],[5,10,'早上好，今天也要好好吃早饭 🍃'],
+    [10,13,'上午愉快，记得喝水哦 💧'],[13,15,'午后小憩，补充能量 ☕'],
+    [15,18,'下午好，起来活动一下 🚶'],[18,21,'傍晚好，今天辛苦了 🌸'],
+    [21,24,'夜深了，好好休息吧 🌙']
+  ];
+  const greeting = greetings.find(([s,e]) => h >= s && h < e)?.[2] || '美好的一天，从关爱自己开始';
+  document.getElementById('hero-greeting').textContent = greeting;
+  document.getElementById('weekday-display').textContent = WEEKDAYS[wd];
+}
+
+// ──────────────────────────────────────────────
+// 天气（含文字叙述）
+// ──────────────────────────────────────────────
+const WEATHER_ICON_MAP = {'晴':'☀️','多云':'⛅','阴':'☁️','阵雨':'🌦️','雷阵雨':'⛈️','小雨':'🌧️','中雨':'🌧️','大雨':'🌧️','暴雨':'⛈️','雪':'❄️','小雪':'🌨️','雾':'🌫️','霾':'🌫️','沙尘':'🌪️'};
+const WEATHER_ADVICE = {
+  sunny: '🌞 今天阳光明媚，非常适合出门散步。记得做好防晒，戴上喜欢的帽子，享受日光浴吧～',
+  cloudy: '🌤️ 今天多云，光线柔和，是户外活动的好天气。不妨去公园走走，感受微风拂面。',
+  rainy: '☔ 今天有雨，记得带伞，路面湿滑请注意脚步安全。听雨也是一种享受，泡杯热茶吧。',
+  foggy:  '🌫️ 能见度较低，出行请注意安全。口罩也记得带好，是对自己最好的保护。',
+  snowy:  '❄️ 今天有雪，注意保暖，小心路滑。窗外雪花纷飞，屋内温暖如春，是最好的时光。',
+};
+const WEATHER_NARRATIVE = {
+  sunny: '阳光是自然界最好的消毒剂，也是心情的天然调节剂。今天是个出门的好日子 ☀️',
+  cloudy: '云朵是天空的诗，今天的天空写满了温柔。',
+  rainy: '雨声是大自然最治愈的白噪音，今天适合在室内读一本好书。',
+  foggy:  '雾气朦胧的日子，适合放慢脚步，给自己多一份耐心和温柔。',
+  snowy:  '雪花是冬天寄来的信，每一片都写着"纯洁"二字。',
+};
+
+function getWeatherCat(t) {
+  if (!t) return 'cloudy';
+  if (t.includes('雨')) return 'rainy';
+  if (t.includes('雪')) return 'snowy';
+  if (t.includes('雾')||t.includes('霾')) return 'foggy';
+  if (t.includes('晴')) return 'sunny';
+  return 'cloudy';
+}
+
+async function loadWeather() {
+  if (!CONFIG.QWEATHER_KEY) {
+    document.getElementById('weather-loading').classList.add('hidden');
+    document.getElementById('weather-api-notice').classList.remove('hidden');
+    document.getElementById('weather-location').textContent = '未接入';
+    document.getElementById('weather-narrative').textContent = '天气数据暂未接入，在配置区填入和风天气 Key 后自动启用 ☁️';
+    return;
+  }
+  try {
+    let lat, lon, city = '当前位置';
+    if (CONFIG.CITY === 'auto' && navigator.geolocation) {
+      try {
+        const pos = await new Promise((res,rej) => navigator.geolocation.getCurrentPosition(res,rej,{timeout:5000}));
+        lat = pos.coords.latitude.toFixed(2); lon = pos.coords.longitude.toFixed(2);
+      } catch {}
+    }
+    const loc = (lat && lon) ? `${lon},${lat}` : (CONFIG.CITY === 'auto' ? '101010100' : CONFIG.CITY);
+    if (!lat) city = CONFIG.CITY === 'auto' ? '北京' : CONFIG.CITY;
+    const res  = await fetch(`https://devapi.qweather.com/v7/weather/now?location=${loc}&key=${CONFIG.QWEATHER_KEY}&lang=zh`);
+    if (!res.ok) throw 0;
+    const data = await res.json();
+    if (data.code !== '200') throw 0;
+    const now = data.now;
+    document.getElementById('weather-icon').textContent     = WEATHER_ICON_MAP[now.text] || '🌤️';
+    document.getElementById('weather-temp').textContent     = now.temp;
+    document.getElementById('weather-text').textContent     = now.text;
+    document.getElementById('uv-value').textContent         = now.uvIndex > 0 ? now.uvIndex : '低';
+    document.getElementById('weather-humidity').textContent = now.humidity + '%';
+    document.getElementById('weather-wind').textContent     = now.windScale + '级';
+    document.getElementById('weather-feelslike').textContent= now.feelsLike + '°';
+    document.getElementById('weather-vis').textContent      = now.vis + 'km';
+    document.getElementById('weather-location').textContent = city;
+
+    const cat = getWeatherCat(now.text);
+    document.getElementById('weather-advice-text').textContent = WEATHER_ADVICE[cat];
+    document.getElementById('weather-narrative').textContent  = WEATHER_NARRATIVE[cat];
+
+    document.getElementById('weather-loading').classList.add('hidden');
+    document.getElementById('weather-data').classList.remove('hidden');
+    document.getElementById('weather-advice-wrap').classList.remove('hidden');
+  } catch {
+    document.getElementById('weather-loading').classList.add('hidden');
+    document.getElementById('weather-api-notice').classList.remove('hidden');
+    document.getElementById('weather-location').textContent = '加载失败';
+    document.getElementById('weather-narrative').textContent = '天气数据加载失败，请检查网络连接或和风天气 Key 配置 ☁️';
+  }
+}
+
+// ──────────────────────────────────────────────
+// 步数
+// ──────────────────────────────────────────────
+function initSteps() {
+  document.getElementById('steps-goal-text').textContent = `目标 ${CONFIG.STEPS_GOAL.toLocaleString()} 步`;
+}
+
+// ──────────────────────────────────────────────
+// 本周打卡
+// ──────────────────────────────────────────────
+function getWeekKey() {
+  const d = new Date();
+  const startOfYear = new Date(d.getFullYear(), 0, 1);
+  const weekNo = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+  return `checkins_${d.getFullYear()}_W${weekNo}`;
+}
+
+function initWeekCalendar() {
+  const days = ['日','一','二','三','四','五','六'];
+  const today = new Date().getDay();
+  const storageKey = getWeekKey();
+  let checkins = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  const streakCount = checkins.length;
+
+  document.getElementById('streak-text').textContent = streakCount > 0 ? `已打卡 ${streakCount} 天` : '坚持中';
+
+  const container = document.getElementById('week-calendar');
+  container.innerHTML = '';
+  days.forEach((day, i) => {
+    const isPast   = i < today;
+    const isToday  = i === today;
+    const checked  = checkins.includes(i);
+
+    const cell = document.createElement('div');
+    cell.className = 'flex flex-col items-center gap-1';
+    cell.setAttribute('role', 'button');
+    cell.setAttribute('aria-label', `周${day}${checked?'已打卡':'未打卡'}`);
+    cell.setAttribute('tabindex', isToday ? '0' : '-1');
+
+    const dot = document.createElement('div');
+    dot.id = `cal-dot-${i}`;
+    dot.style.cssText = [
+      'width:40px;height:40px;border-radius:50%;',
+      'display:flex;align-items:center;justify-content:center;',
+      'font-size:14px;font-weight:600;',
+      'transition:all 0.3s var(--ease-out-back);',
+      isToday
+        ? 'background:linear-gradient(135deg,#8aab8e,#b8d4ba);color:#fff;box-shadow:0 4px 14px rgba(138,171,142,0.4);'
+        : checked
+          ? 'background:rgba(138,171,142,0.2);color:#5a7a5e;border:1.5px solid rgba(138,171,142,0.4);'
+          : isPast
+            ? 'background:rgba(160,152,136,0.08);color:#c0b8b0;border:1px dashed rgba(160,152,136,0.2);'
+            : 'background:rgba(138,171,142,0.07);color:#a0b8a0;border:1px solid rgba(138,171,142,0.2);'
+    ].join('');
+    dot.textContent = checked ? '✓' : day;
+
+    const label = document.createElement('span');
+    label.style.cssText = `font-size:9px;letter-spacing:0.04em;color:${isToday?'#8aab8e':'#c0b8b0'};`;
+    label.textContent = isToday ? '今天' : '周' + day;
+
+    cell.appendChild(dot); cell.appendChild(label);
+
+    if (isToday) {
+      const doCheck = () => {
+        if (checkins.includes(today)) return;
+        checkins.push(today);
+        localStorage.setItem(storageKey, JSON.stringify(checkins));
+        dot.textContent = '✓';
+        dot.style.background = 'linear-gradient(135deg,#5a9060,#8aab8e)';
+        dot.style.transform = 'scale(1.18)';
+        setTimeout(() => dot.style.transform = '', 350);
+        document.getElementById('streak-text').textContent = `已打卡 ${checkins.length} 天`;
+        celebrate(['✅','🌿','🌸','⭐']);
+      };
+      cell.addEventListener('click', doCheck);
+      cell.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){e.preventDefault();doCheck();} });
+    }
+    container.appendChild(cell);
+  });
+}
+
+// ──────────────────────────────────────────────
+// 饮水追踪
+// ──────────────────────────────────────────────
+function getTodayKey() {
+  const d = new Date();
+  return `water_${d.getFullYear()}_${d.getMonth()+1}_${d.getDate()}`;
+}
+
+let waterCurrent = parseInt(localStorage.getItem(getTodayKey()) || '0');
+
+function renderWater() {
+  const goal = CONFIG.WATER_GOAL;
+  const pct  = Math.min(waterCurrent / goal, 1);
+  const cups = 8;
+  const filled = Math.round(pct * cups);
+
+  const el = document.getElementById('water-current');
+  el.textContent = waterCurrent;
+  el.style.color = waterCurrent >= goal ? '#5a9060' : '#3a3530';
+
+  // 更新文字叙述
+  const nar = document.getElementById('water-narrative');
+  if (waterCurrent === 0) {
+    nar.textContent = '充足的水分让肌肤水润、精神饱满。今天喝够水了吗？';
+  } else if (waterCurrent < goal * 0.5) {
+    nar.textContent = `今天已经喝了 ${waterCurrent}ml，再接再厉，离目标还有 ${goal - waterCurrent}ml ～`;
+  } else if (waterCurrent < goal) {
+    nar.textContent = `已经完成 ${Math.round(pct*100)}% 啦！还差一点点就达标了，加油 💪`;
+  } else {
+    nar.textContent = '🎉 今天的饮水目标已达成！皮肤会说谢谢你的 🌸';
+  }
+
+  const container = document.getElementById('water-cups');
+  container.innerHTML = '';
+  for (let i = 0; i < cups; i++) {
+    const cup = document.createElement('div');
+    const isFilled = i < filled;
+    cup.style.cssText = [
+      'width:26px;height:38px;border-radius:5px 5px 8px 8px;flex-shrink:0;',
+      'position:relative;overflow:hidden;',
+      `border:1.5px solid ${isFilled?'rgba(138,171,142,0.5)':'rgba(180,170,160,0.2)'};`,
+      `background:${isFilled?'linear-gradient(180deg,rgba(138,171,142,0.3) 0%,rgba(138,171,142,0.6) 100%)':'rgba(240,236,230,0.35)'};`,
+      'transition:all 0.35s var(--ease-out-expo);',
+      `animation-delay:${i*0.05}s;`,
+    ].join('');
+    if (isFilled) {
+      const wave = document.createElement('div');
+      wave.style.cssText = `position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:9px;line-height:1;animation:float ${1.5+i*0.15}s ease-in-out ${i*0.1}s infinite alternate;`;
+      wave.textContent = '〜';
+      cup.appendChild(wave);
+    }
+    container.appendChild(cup);
+  }
+}
+
+function addWater(ml) {
+  waterCurrent = Math.min(waterCurrent + ml, CONFIG.WATER_GOAL + 800);
+  localStorage.setItem(getTodayKey(), String(waterCurrent));
+  renderWater();
+  if (waterCurrent >= CONFIG.WATER_GOAL && waterCurrent - ml < CONFIG.WATER_GOAL) {
+    celebrate(['💧','🌿','🎉','✨','🌸']);
+  }
+}
+
+function resetWater(e) {
+  const btn = e.currentTarget;
+  if (btn.dataset.confirming === '1') {
+    btn.dataset.confirming = '';
+    btn.textContent = '重置';
+    btn.style.color = '#a09888';
+    waterCurrent = 0;
+    localStorage.setItem(getTodayKey(), '0');
+    renderWater();
+  } else {
+    btn.dataset.confirming = '1';
+    btn.textContent = '确定？';
+    btn.style.color = '#c05040';
+    setTimeout(() => {
+      if (btn.dataset.confirming === '1') {
+        btn.dataset.confirming = '';
+        btn.textContent = '重置';
+        btn.style.color = '#a09888';
+      }
+    }, 3000);
+  }
+}
+
+// ──────────────────────────────────────────────
+// 庆祝粒子
+// ──────────────────────────────────────────────
+function celebrate(emojis = ['🌸','✨','🎉','🌿','💧']) {
+  const styleId = 'fly-style';
+  if (!document.getElementById(styleId)) {
+    const s = document.createElement('style');
+    s.id = styleId;
+    s.textContent = `@keyframes fly{0%{transform:translateY(0) scale(1) rotate(0deg);opacity:1}100%{transform:translateY(-65vh) scale(0.4) rotate(var(--r,180deg));opacity:0}}`;
+    document.head.appendChild(s);
+  }
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.cssText = [
+      'position:fixed;pointer-events:none;z-index:9999;',
+      `left:${10+Math.random()*80}vw;top:75vh;`,
+      `font-size:${13+Math.random()*14}px;`,
+      `--r:${(Math.random()>0.5?1:-1)*(100+Math.random()*260)}deg;`,
+      `animation:fly ${1.2+Math.random()*1}s cubic-bezier(0.22,1,0.36,1) ${Math.random()*0.5}s forwards;`,
+    ].join('');
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+}
+
+// ──────────────────────────────────────────────
+// 卡片入场（Intersection Observer）
+// ──────────────────────────────────────────────
+function initRevealAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.card-reveal').forEach(el => observer.observe(el));
+}
+
+// ──────────────────────────────────────────────
+// 主应用初始化
+// ──────────────────────────────────────────────
+function initApp() {
+  initDate();
+  showVerse(currentVerseIndex);
+  initTip();
+  initSteps();
+  initWeekCalendar();
+  renderWater();
+  initRevealAnimations();
+  loadWeather();
+}
+
+// ──────────────────────────────────────────────
+// 页面启动
+// ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  spawnPetals();
+  if (isLoggedIn()) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display   = 'block';
+    document.getElementById('app-screen').classList.add('enter');
+    initApp();
+  }
+});
+</script>
+
+</body>
+</html>
