@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>「妈妈的健康生活」· 分享卡片</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400&family=ZCOOL+XiaoWei&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5f0eb 0%, #e8f0e9 50%, #f5f0eb 100%);
+      font-family: 'Noto Sans SC', sans-serif;
+      padding: 24px;
+    }
+
+    .card {
+      width: 380px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow:
+        0 8px 40px rgba(100,90,80,0.10),
+        0 2px 8px rgba(100,90,80,0.05);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 花瓣装饰 */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(138,171,142,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 60px; left: -20px;
+      width: 80px; height: 80px;
+      background: radial-gradient(circle, rgba(232,213,200,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #8aab8e 0%, #a8c4aa 100%);
+      padding: 36px 28px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 24px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+    .header-icon {
+      font-size: 36px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.10));
+    }
+    .header-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .header-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 6px;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .card-body {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .verse-block {
+      text-align: center;
+      padding: 16px 20px;
+      background: rgba(138,171,142,0.06);
+      border-radius: 16px;
+      border: 1px solid rgba(138,171,142,0.12);
+      width: 100%;
+    }
+    .verse-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 15px;
+      color: #5a6b5d;
+      line-height: 1.8;
+      letter-spacing: 1px;
+    }
+    .verse-author {
+      font-size: 11px;
+      color: #8aab8e;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .qr-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .qr-frame {
+      padding: 12px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 2px 16px rgba(100,90,80,0.08);
+      border: 1px solid rgba(138,171,142,0.15);
+    }
+    .qr-frame img {
+      display: block;
+      width: 160px;
+      height: 160px;
+      border-radius: 8px;
+    }
+    .qr-hint {
+      font-size: 12px;
+      color: #8a8a7a;
+      letter-spacing: 0.5px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+    }
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 4px;
+      background: rgba(138,171,142,0.05);
+      border-radius: 14px;
+      border: 1px solid rgba(138,171,142,0.10);
+    }
+    .feature-icon { font-size: 20px; }
+    .feature-label {
+      font-size: 10px;
+      color: #6b6560;
+      letter-spacing: 0.5px;
+    }
+
+    .card-footer {
+      padding: 0 28px 28px;
+      text-align: center;
+    }
+    .url-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(138,171,142,0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(138,171,142,0.12);
+      font-size: 11px;
+      color: #8aab8e;
+      letter-spacing: 0.3px;
+      word-break: break-all;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .url-display:hover {
+      background: rgba(138,171,142,0.14);
+    }
+    .footer-note {
+      font-size: 10px;
+      color: #b8a898;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .petal {
+      position: absolute;
+      width: 12px; height: 12px;
+      background: radial-gradient(ellipse, rgba(138,171,142,0.18) 0%, transparent 70%);
+      border-radius: 50% 0 50% 0;
+      pointer-events: none;
+      animation: float 6s ease-in-out infinite;
+    }
+    .petal:nth-child(1) { top: 80px; right: 20px; animation-delay: 0s; }
+    .petal:nth-child(2) { top: 120px; right: 50px; animation-delay: 2s; width: 8px; height: 8px; }
+    .petal:nth-child(3) { top: 60px; left: 30px; animation-delay: 4s; width: 10px; height: 10px; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+      50% { transform: translateY(-8px) rotate(15deg); opacity: 1; }
+    }
+
+    .save-hint {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #8a8a7a;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <!-- 花瓣装饰 -->
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+
+    <!-- 头部 -->
+    <div class="card-header">
+      <div class="header-icon">🌸</div>
+      <div class="header-title">妈妈的健康生活</div>
+      <div class="header-sub">温馨陪伴 · 每一天</div>
+    </div>
+
+    <!-- 身体 -->
+    <div class="card-body">
+
+      <!-- 今日诗句 -->
+      <div class="verse-block">
+        <div class="verse-text" id="verseText">采菊东篱下，悠然见南山</div>
+        <div class="verse-author" id="verseAuthor">陶渊明《饮酒·其五》</div>
+      </div>
+
+      <!-- 二维码 -->
+      <div class="qr-section">
+        <div class="qr-frame">
+          <img id="qrImg" src="" alt="扫码访问" />
+        </div>
+        <div class="qr-hint">📱 长按识别 · 一键访问</div>
+      </div>
+
+      <!-- 功能图标 -->
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🌤️</div>
+          <div class="feature-label">今日天气</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💧</div>
+          <div class="feature-label">饮水追踪</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">👟</div>
+          <div class="feature-label">步数统计</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-label">习惯打卡</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📜</div>
+          <div class="feature-label">古诗雅言</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎵</div>
+          <div class="feature-label">舒缓音乐</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="card-footer">
+      <div class="url-display" id="urlDisplay" title="点击复制链接">
+        🔗 WFcat9.github.io/mom
+      </div>
+      <div class="footer-note">❤️ 专属健康助手 · 为妈妈精心打造</div>
+    </div>
+  </div>
+
+  <div class="save-hint">💡 截图保存此卡片，即可分享给亲友</div>
+
+  <script>
+    // ── 配置 ──────────────────────────────
+    const SITE_URL = 'https://WFcat9.github.io/mom/';
+    const DAILY_VERSES = [
+      { text: '采菊东篱下，悠然见南山。', author: '陶渊明《饮酒·其五》' },
+      { text: '人间有味是清欢。', author: '苏轼《浣溪沙》' },
+      { text: '春风得意马蹄疾，一日看尽长安花。', author: '孟郊《登科后》' },
+      { text: '采得百花成蜜后，为谁辛苦为谁甜。', author: '罗隐《蜂》' },
+      { text: '独坐幽篁里，弹琴复长啸。', author: '王维《竹里馆》' },
+      { text: '明月松间照，清泉石上流。', author: '王维《山居秋暝》' },
+      { text: '身无彩凤双飞翼，心有灵犀一点通。', author: '李商隐《无题》' },
+      { text: '海内存知己，天涯若比邻。', author: '王勃《送杜少府之任蜀州》' },
+      { text: '会当凌绝顶，一览众山小。', author: '杜甫《望岳》' },
+      { text: '长风破浪会有时，直挂云帆济沧海。', author: '李白《行路难》' },
+      { text: '落红不是无情物，化作春泥更护花。', author: '龚自珍《己亥杂诗》' },
+      { text: '问渠那得清如许？为有源头活水来。', author: '朱熹《观书有感》' },
+      { text: '不识庐山真面目，只缘身在此山中。', author: '苏轼《题西林壁》' },
+      { text: '欲穷千里目，更上一层楼。', author: '王之涣《登鹳雀楼》' },
+      { text: '竹外桃花三两枝，春江水暖鸭先知。', author: '苏轼《惠崇春江晚景》' },
+      { text: '十年磨一剑，霜刃未曾试。', author: '贾岛《剑客》' },
+      { text: '野火烧不尽，春风吹又生。', author: '白居易《赋得古原草送别》' },
+      { text: '春蚕到死丝方尽，蜡炬成灰泪始干。', author: '李商隐《无题》' },
+      { text: '两岸猿声啼不住，轻舟已过万重山。', author: '李白《早发白帝城》' },
+      { text: '此情可待成追忆，只是当时已惘然。', author: '李商隐《锦瑟》' },
+      { text: '但愿人长久，千里共婵娟。', author: '苏轼《水调歌头》' },
+    ];
+
+    // ── 每日诗句 ─────────────────────────
+    function initVerse() {
+      const d = new Date();
+      const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+      const v = DAILY_VERSES[dayOfYear % DAILY_VERSES.length];
+      document.getElementById('verseText').textContent = v.text;
+      document.getElementById('verseAuthor').textContent = v.author;
+    }
+
+    // ── QR Code（使用 qrserver API）───────────────────
+    function initQR() {
+      const size = 300;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(SITE_URL)}&bgcolor=ffffff&color=000000&qzone=4&format=png`;
+      document.getElementById('qrImg').src = qrUrl;
+    }
+
+    // ── 点击复制链接 ─────────────────────
+    document.getElementById('urlDisplay').addEventListener('click', function () {
+      navigator.clipboard.writeText(SITE_URL).then(() => {
+        const orig = this.innerHTML;
+        this.innerHTML = '✅ 链接已复制';
+        setTimeout(() => { this.innerHTML = orig; }, 1500);
+      });
+    });
+
+    // ── 启动 ─────────────────────────────
+    initVerse();
+    initQR();
+  </script>
+</body>
+</html>
